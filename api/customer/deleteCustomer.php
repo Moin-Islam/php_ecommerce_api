@@ -5,8 +5,8 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-include_once('../config/Database.php');
-include_once('../objects/Customer.php');
+include_once('../../config/Database.php');
+include_once('../../objects/Customer.php');
 
 $database = new Database();
 $pdo = $database->getConnection();
@@ -15,23 +15,16 @@ $customer = new Customer($pdo);
 $data = json_decode(file_get_contents("php://input"));
 
 $customer->id = $data->id;
-$customer->name = $data->name;
-$customer->email = $data->email;
-$customer->password = $data->password;
-$customer->phone = $data->phone;
-$customer->shipping_address = $data->shipping_address;
-$customer->billing_address = $data->billing_address;
 
-if($customer->updateCustomer()){
+if($customer->deleteCustomer()){
     http_response_code(200);
-
     echo json_encode([
-        "message"=>"Customer Info Updated Successfully"
+        "message" => "Customer was deleted successfully"
     ]);
-} else {
+}else {
     http_response_code(500);
 
     echo json_encode([
-        "message"=>"Customer Info Update was not Successfull"
+        "message" => "Unable to delete customer, Customer doesn't exist!!"
     ]);
 }

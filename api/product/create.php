@@ -5,8 +5,8 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-include_once('../config/Database.php');
-include_once('../objects/Product.php');
+include_once('../../config/Database.php');
+include_once('../../objects/Product.php');
 
 $database = new Database();
 $pdo = $database->getConnection();
@@ -21,6 +21,7 @@ if(!empty($data->name) && !empty($data->price) && !empty($data->description) && 
     $product->image = $data->image;
     $product->quantity = $data->quantity;
     $product->size = $data->size;
+    $product->tag = $data->tag;
 
     if($product->create()){
         http_response_code(201);

@@ -2,8 +2,8 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
-include_once('../config/Database.php');
-include_once('../objects/Blog.php');
+include_once('../../config/Database.php');
+include_once('../../objects/Blog.php');
 
 $database = new Database();
 $pdo = $database->getConnection();
@@ -23,6 +23,7 @@ if ($num>0) {
             "id"=>$id,
             "title"=> $title,
             "content"=> $content,
+            "image"=> $image,
         ];
 
         array_push($blog_arr["records"],$blog_list);

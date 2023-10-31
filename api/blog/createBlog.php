@@ -5,8 +5,8 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-include_once('../config/Database.php');
-include_once('../objects/Blog.php');
+include_once('../../config/Database.php');
+include_once('../../objects/Blog.php');
 
 $database = new Database();
 $pdo = $database->getConnection();
@@ -17,6 +17,7 @@ $data = json_decode(file_get_contents("php://input"));
 if(!empty($data->title) && !empty($data->content)) {
     $blog->title = $data->title;
     $blog->content = $data->content;
+    $blog->image = $data->image;
 
     if ($blog->createblog()){
         http_response_code(200);

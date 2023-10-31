@@ -5,6 +5,7 @@ class Blog{
     public $id;
     public $title;
     public $content;
+    public $image;
     public $created_at;
 
     public function __construct($pdo){
@@ -19,14 +20,16 @@ class Blog{
     }
 
     public function createblog() {
-        $query = "INSERT INTO $this->table_name(title,content) VALUES(:title, :content)";
+        $query = "INSERT INTO $this->table_name(title,content,image) VALUES(:title, :content, :image)";
         $stmt = $this->conn->prepare($query);
 
         $this->title = htmlspecialchars(strip_tags($this->title));
         $this->content = htmlspecialchars(strip_tags($this->content));
+        $this->content = htmlspecialchars(strip_tags($this->image));
 
         $stmt->bindParam(":title", $this->title);
         $stmt->bindParam(":content", $this->content);
+        $stmt->bindParam(":image", $this->image);
 
         if($stmt->execute()){
             return true;
@@ -49,16 +52,18 @@ class Blog{
 
     public function updateBlog() {
         $query = "UPDATE $this->table_name
-                 SET title = :title, content = :content WHERE id =:id";
+                 SET title = :title, content = :content, image = :image WHERE id =:id";
         $stmt = $this->conn->prepare($query);
 
         $this->id = htmlspecialchars(strip_tags($this->id));
         $this->title = htmlspecialchars(strip_tags($this->title));
         $this->content = htmlspecialchars(strip_tags($this->content));
+        $this->image = htmlspecialchars(strip_tags($this->image));
 
         $stmt->bindParam(":id", $this->id);
         $stmt->bindParam(":title", $this->title);
         $stmt->bindParam(":content", $this->content);
+        $stmt->bindParam(":image", $this->image);
 
         if($stmt->execute()){
             return true;

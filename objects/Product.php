@@ -11,6 +11,7 @@ class Product{
     public $image;
     public $quantity;
     public $size;
+    public $tag;
 
     public function __construct($pdo) {
         $this->conn = $pdo;
@@ -24,8 +25,8 @@ class Product{
     }
 
     public function create() {
-        $query = "INSERT INTO $this->table_name (name, price, description, image, quantity, size)
-        VALUES (:name, :price, :description, :image, :quantity, :size)";
+        $query = "INSERT INTO $this->table_name (name, price, description, image, quantity, size, tag)
+        VALUES (:name, :price, :description, :image, :quantity, :size, :tag)";
         $stmt = $this->conn->prepare($query);
         
         $this->name = htmlspecialchars(strip_tags($this->name));
@@ -34,6 +35,7 @@ class Product{
         $this->image = htmlspecialchars(strip_tags($this->image));
         $this->quantity = htmlspecialchars(strip_tags($this->quantity));
         $this->size = htmlspecialchars(strip_tags($this->size));
+        $this->tag = htmlspecialchars(strip_tags($this->tag));
 
         $stmt->bindParam(":name", $this->name);
         $stmt->bindParam(":price", $this->price);
@@ -41,6 +43,7 @@ class Product{
         $stmt->bindParam(":image", $this->image);
         $stmt->bindParam(":quantity", $this->quantity);
         $stmt->bindParam(":size", $this->size);
+        $stmt->bindParam(":tag", $this->tag);
 
         if($stmt->execute()){
             return true;
@@ -51,7 +54,7 @@ class Product{
 
     public function update() {
         $query = "Update $this->table_name
-                 SET name = :name, price = :price, description = :description, image = :image, quantity = :quantity, size = :size
+                 SET name = :name, price = :price, description = :description, image = :image, quantity = :quantity, size = :size, tag = :tag
                  WHERE id = :id";
         $stmt = $this->conn->prepare($query);
 
@@ -63,6 +66,7 @@ class Product{
         $this->image = htmlspecialchars(strip_tags($this->image));
         $this->quantity = htmlspecialchars(strip_tags($this->quantity));
         $this->size = htmlspecialchars(strip_tags($this->size));
+        $this->tag = htmlspecialchars(strip_tags($this->tag));
 
         $stmt->bindParam(":id", $this->id);
         $stmt->bindParam(":name", $this->name);
@@ -71,7 +75,7 @@ class Product{
         $stmt->bindParam(":image", $this->image);
         $stmt->bindParam(":quantity", $this->quantity);
         $stmt->bindParam(":size", $this->size);
-       
+        $stmt->bindParam(":tag", $this->tag);
 
         if($stmt->execute()){
             return true;
@@ -95,6 +99,7 @@ class Product{
         $this->image = $row["image"];
         $this->quantity = $row["quantity"];
         $this->size = $row["size"];
+        $this->tag = $row["tag"];
     }
 
     public function delete() {
@@ -110,5 +115,18 @@ class Product{
             return true;
         }
         return false;
+    }
+
+    public function getItemByTag() {
+        $query = "SELECT * FROM $this->table_name WHERE tag = :tag";
+        $stmt = $this->conn->prepare($query);
+
+        $this->tag = htmlspecialchars(strip_tags($this->tag));
+
+        $stmt->bindParam(":tag", $this->tag);
+
+        $stmt->execute();
+
+        return $stmt;
     }
 }

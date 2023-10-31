@@ -2,8 +2,8 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
-include_once('../config/Database.php');
-include_once('../objects/Product.php');
+include_once('../../config/Database.php');
+include_once('../../objects/Product.php');
 
 $database = new Database();
 $pdo = $database->getConnection();
@@ -29,14 +29,13 @@ if($num > 0){
             "image"=>$image,
             "quantity"=> $quantity,
             "size"=> $size,
+            "tag" => $tag
         ];
 
         array_push($products_arr["records"], $product_item);
     }
 
     http_response_code(200);
-    print_r($products_arr);
-
     echo json_encode($products_arr);
 } else {
     http_response_code(404);

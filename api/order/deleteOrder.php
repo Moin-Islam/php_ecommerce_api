@@ -5,26 +5,26 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-include_once('../config/Database.php');
-include_once('../objects/Product.php');
+include_once('../../config/Database.php');
+include_once('../../objects/Order.php');
 
 $database = new Database();
 $pdo = $database->getConnection();
-$product = new Product($pdo);
+$order = new Order($pdo);
 
 $data = json_decode(file_get_contents("php://input"));
 
-$product->id = $data->id;
+$order->id = $data->id;
 
-if($product->delete()){
+if($order->deleteOrder()){
     http_response_code(200);
     echo json_encode([
-        "message"=> "Successfully deleted the product"
+        "message" => "Order was deleted successfully"
     ]);
 }else {
-    http_response_code(501);
+    http_response_code(500);
 
     echo json_encode([
-        "message" => "Unable to delete the product"
+        "message" => "Unable to delete the order, that order doesn't exist!!"
     ]);
 }

@@ -5,27 +5,26 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-include_once('../config/Database.php');
-include_once('../objects/Blog.php');
+include_once('../../config/Database.php');
+include_once('../../objects/Product.php');
 
 $database = new Database();
 $pdo = $database->getConnection();
-$blog = new Blog($pdo);
+$product = new Product($pdo);
 
 $data = json_decode(file_get_contents("php://input"));
 
-$blog->id = $data->id;
-$blog->title = $data->title;
-$blog->content = $data->content;
+$product->id = $data->id;
 
-if ($blog->updateBlog()){
+if($product->delete()){
     http_response_code(200);
     echo json_encode([
-        "message"=>"Updated The Blog Successfully"
+        "message"=> "Successfully deleted the product"
     ]);
-} else {
-    http_response_code(500);
+}else {
+    http_response_code(501);
+
     echo json_encode([
-        "message"=> "Unable to Update The Blog"
+        "message" => "Unable to delete the product"
     ]);
 }
